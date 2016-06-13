@@ -1,7 +1,7 @@
 ******************************************************************************
              TMS320C2000 Linker PC v6.4.6                      
 ******************************************************************************
->> Linked Mon Jun 13 16:12:46 2016
+>> Linked Mon Jun 13 16:31:17 2016
 
 OUTPUT FILE NAME:   <test.out>
 ENTRY POINT SYMBOL: "_c_int00"  address: 000082c0
@@ -14,7 +14,7 @@ MEMORY CONFIGURATION
 PAGE 0:
   BEGIN                 00000000   00000002  00000002  00000000  RWIX
   RAMM0                 00000050   000003b0  0000001a  00000396  RWIX
-  RAML0L1               00008000   00000c00  000003ba  00000846  RWIX
+  RAML0L1               00008000   00000c00  000003d2  0000082e  RWIX
   IQTABLES              003fe000   00000b50  00000000  00000b50  RWIX
   IQTABLES2             003feb50   0000008c  00000000  0000008c  RWIX
   IQTABLES3             003febdc   000000aa  00000000  000000aa  RWIX
@@ -90,17 +90,19 @@ codestart
 ramfuncs   0    00000066    00000004     
                   00000066    00000004     DSP2803x_usDelay.obj (ramfuncs)
 
-.text      0    00008000    000003ba     
+.text      0    00008000    000003d2     
                   00008000    0000017c     DSP2803x_DefaultIsr.obj (.text:retain)
                   0000817c    00000144     DSP2803x_SysCtrl.obj (.text)
                   000082c0    00000044     rts2800_ml.lib : boot.obj (.text)
                   00008304    00000028     DSP2803x_PieCtrl.obj (.text)
                   0000832c    00000028     DSP2803x_PieVect.obj (.text)
-                  00008354    00000023     main.obj (.text)
-                  00008377    00000019     rts2800_ml.lib : args_main.obj (.text)
-                  00008390    00000019                    : exit.obj (.text)
-                  000083a9    00000009                    : _lock.obj (.text)
-                  000083b2    00000008     DSP2803x_CodeStartBranch.obj (.text)
+                  00008354    0000001f     main.obj (.text)
+                  00008373    00000019     rts2800_ml.lib : args_main.obj (.text)
+                  0000838c    00000019                    : exit.obj (.text)
+                  000083a5    0000000e     key.obj (.text)
+                  000083b3    0000000e     led.obj (.text)
+                  000083c1    00000009     rts2800_ml.lib : _lock.obj (.text)
+                  000083ca    00000008     DSP2803x_CodeStartBranch.obj (.text)
 
 .pinit     0    00000050    00000000     UNINITIALIZED
 
@@ -414,7 +416,7 @@ GLOBAL SYMBOLS: SORTED ALPHABETICALLY BY Name
 page  address   name                 
 ----  -------   ----                 
 0     00008000  .text                
-0     00008390  C$$EXIT              
+0     0000838c  C$$EXIT              
 0     0000805f  _ADCINT1_ISR         
 0     00008064  _ADCINT2_ISR         
 0     00008118  _ADCINT3_ISR         
@@ -509,10 +511,12 @@ page  address   name
 0     0000817c  _InitSysCtrl         
 0     0000826a  _IntOsc1Sel          
 0     0000827a  _IntOsc2Sel          
+0     000083a5  _Key_Init            
 0     00008104  _LIN0INTA_ISR        
 0     00008109  _LIN1INTA_ISR        
 0     00008168  _LUF_ISR             
 0     00008163  _LVF_ISR             
+0     000083b3  _Led_Init            
 1     00006c00  _LinaRegs            
 0     00008019  _NMI_ISR             
 1     00007060  _NmiIntruptRegs      
@@ -534,6 +538,7 @@ page  address   name
 1     00007740  _SpibRegs            
 1     00007010  _SysCtrlRegs         
 1     00000985  _SysPwrCtrlRegs      
+0     00008354  _System_Init         
 0     00008078  _TINT0_ISR           
 0     00008050  _USER10_ISR          
 0     00008055  _USER11_ISR          
@@ -560,25 +565,25 @@ abs   00000300  __STACK_SIZE
 abs   ffffffff  ___binit__           
 abs   ffffffff  ___c_args__          
 0     00000050  ___cinit__           
-0     000083ba  ___etext__           
+0     000083d2  ___etext__           
 abs   ffffffff  ___pinit__           
 0     00008000  ___text__            
-0     00008377  __args_main          
+0     00008373  __args_main          
 1     00008d04  __lock               
-0     000083b1  __nop                
-0     000083ad  __register_lock      
-0     000083a9  __register_unlock    
+0     000083c9  __nop                
+0     000083c5  __register_lock      
+0     000083c1  __register_unlock    
 1     00000480  __stack              
 1     00008d06  __unlock             
-0     00008390  _abort               
+0     0000838c  _abort               
 0     000082c0  _c_int00             
-0     00008392  _exit                
-0     00008354  _main                
+0     0000838e  _exit                
+0     00008361  _main                
 0     00008177  _rsvd_ISR            
 abs   ffffffff  binit                
 0     00000050  cinit                
 0     00000000  code_start           
-0     000083ba  etext                
+0     000083d2  etext                
 abs   ffffffff  pinit                
 
 
@@ -682,16 +687,19 @@ page  address   name
 0     00008304  _InitPieCtrl         
 0     00008323  _EnableInterrupts    
 0     0000832c  _InitPieVectTable    
-0     00008354  _main                
-0     00008377  __args_main          
-0     00008390  C$$EXIT              
-0     00008390  _abort               
-0     00008392  _exit                
-0     000083a9  __register_unlock    
-0     000083ad  __register_lock      
-0     000083b1  __nop                
-0     000083ba  ___etext__           
-0     000083ba  etext                
+0     00008354  _System_Init         
+0     00008361  _main                
+0     00008373  __args_main          
+0     0000838c  C$$EXIT              
+0     0000838c  _abort               
+0     0000838e  _exit                
+0     000083a5  _Key_Init            
+0     000083b3  _Led_Init            
+0     000083c1  __register_unlock    
+0     000083c5  __register_lock      
+0     000083c9  __nop                
+0     000083d2  ___etext__           
+0     000083d2  etext                
 1     00000480  __stack              
 1     00000780  __STACK_END          
 1     00000880  _DevEmuRegs          
@@ -754,4 +762,4 @@ abs   ffffffff  ___pinit__
 abs   ffffffff  binit                
 abs   ffffffff  pinit                
 
-[167 symbols]
+[170 symbols]

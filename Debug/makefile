@@ -18,6 +18,8 @@ ORDERED_OBJS += \
 "./DSP2803x_SysCtrl.obj" \
 "./DSP2803x_usDelay.obj" \
 "./main.obj" \
+"./source/key.obj" \
+"./source/led.obj" \
 "../28032_RAM_lnk.cmd" \
 "../DSP2803x_Headers_nonBIOS.cmd" \
 $(GEN_CMDS__FLAG) \
@@ -31,7 +33,9 @@ RMDIR := RMDIR /S/Q
 # All of the sources participating in the build are defined here
 -include sources.mk
 -include subdir_vars.mk
+-include source/subdir_vars.mk
 -include subdir_rules.mk
+-include source/subdir_rules.mk
 -include objects.mk
 
 ifneq ($(MAKECMDGOALS),clean)
@@ -157,8 +161,8 @@ test.hex: $(EXE_OUTPUTS)
 # Other Targets
 clean:
 	-$(RM) $(EXE_OUTPUTS__QUOTED)$(BIN_OUTPUTS__QUOTED)
-	-$(RM) "DSP2803x_DefaultIsr.pp" "DSP2803x_GlobalVariableDefs.pp" "DSP2803x_PieCtrl.pp" "DSP2803x_PieVect.pp" "DSP2803x_SysCtrl.pp" "main.pp" 
-	-$(RM) "DSP2803x_CodeStartBranch.obj" "DSP2803x_DefaultIsr.obj" "DSP2803x_GlobalVariableDefs.obj" "DSP2803x_PieCtrl.obj" "DSP2803x_PieVect.obj" "DSP2803x_SysCtrl.obj" "DSP2803x_usDelay.obj" "main.obj" 
+	-$(RM) "DSP2803x_DefaultIsr.pp" "DSP2803x_GlobalVariableDefs.pp" "DSP2803x_PieCtrl.pp" "DSP2803x_PieVect.pp" "DSP2803x_SysCtrl.pp" "main.pp" "source\key.pp" "source\led.pp" 
+	-$(RM) "DSP2803x_CodeStartBranch.obj" "DSP2803x_DefaultIsr.obj" "DSP2803x_GlobalVariableDefs.obj" "DSP2803x_PieCtrl.obj" "DSP2803x_PieVect.obj" "DSP2803x_SysCtrl.obj" "DSP2803x_usDelay.obj" "main.obj" "source\key.obj" "source\led.obj" 
 	-$(RM) "DSP2803x_CodeStartBranch.pp" "DSP2803x_usDelay.pp" 
 	-@echo 'Finished clean'
 	-@echo ' '

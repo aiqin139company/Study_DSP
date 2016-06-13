@@ -29,6 +29,8 @@ main.obj: C:/ti/controlSUITE/device_support/f2803x/v130/DSP2803x_common/include/
 main.obj: C:/ti/controlSUITE/device_support/f2803x/v130/DSP2803x_common/include/DSP2803x_I2c_defines.h
 main.obj: C:/ti/controlSUITE/device_support/f2803x/v130/DSP2803x_common/include/DSP2803x_Cla_defines.h
 main.obj: C:/ti/controlSUITE/device_support/f2803x/v130/DSP2803x_common/include/DSP2803x_DefaultISR.h
+main.obj: C:/ti/ccs_workspace/test/headers/key.h
+main.obj: C:/ti/ccs_workspace/test/headers/led.h
 
 ../main.c: 
 C:/ti/controlSUITE/device_support/f2803x/v130/DSP2803x_headers/include/DSP2803x_Device.h: 
@@ -59,3 +61,5 @@ C:/ti/controlSUITE/device_support/f2803x/v130/DSP2803x_common/include/DSP2803x_E
 C:/ti/controlSUITE/device_support/f2803x/v130/DSP2803x_common/include/DSP2803x_I2c_defines.h: 
 C:/ti/controlSUITE/device_support/f2803x/v130/DSP2803x_common/include/DSP2803x_Cla_defines.h: 
 C:/ti/controlSUITE/device_support/f2803x/v130/DSP2803x_common/include/DSP2803x_DefaultISR.h: 
+C:/ti/ccs_workspace/test/headers/key.h: 
+C:/ti/ccs_workspace/test/headers/led.h: 
