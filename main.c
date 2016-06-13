@@ -1,6 +1,7 @@
 #include "DSP2803x_Device.h"
 #include "DSP2803x_Examples.h"
-#include "Sci.h"
+#include "timer.h"
+#include "led.h"
 
 void System_Init(void)
 {
@@ -20,11 +21,12 @@ int main(void)
 	
 	System_Init();
 
-	Sci_Init();
+	Led_Init();
+	Timer_Init();
 
 	while(1)
 	{
-		SCITX(SCIRX());
+
 	}
 
 }
