@@ -24,7 +24,7 @@ void Sci_Init(void)
 	SciaRegs.SCICTL2.bit.RXBKINTENA =1;
 	SciaRegs.SCIHBAUD    =0x0000;
 	SciaRegs.SCILBAUD    =0x0007;
-	SciaRegs.SCICCR.bit.LOOPBKENA =0; // Enable loop back
+	SciaRegs.SCICCR.bit.LOOPBKENA =0; // Disable loop back
 	SciaRegs.SCICTL1.all =0x0023;     // Relinquish SCI from Reset
 
 	EDIS;
@@ -39,8 +39,10 @@ void SCITX(unsigned char dat)
 unsigned char SCIRX(void)
 {
 	unsigned char dat = 0;
-	if(SciaRegs.SCIFFRX.bit.RXFFST != 0)
-		dat = SciaRegs.SCIRXBUF.all;
+
+	//while(SciaRegs.SCIFFRX.bit.RXFFST == 0) {}
+	dat = SciaRegs.SCIRXBUF.all;
+
 	return dat;
 }
 

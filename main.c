@@ -24,8 +24,7 @@ int main(void)
 
 	while(1)
 	{
-		SCITX('a');
-		DELAY_US(1000000);
+		SCITX(SCIRX());
 	}
 
 }
