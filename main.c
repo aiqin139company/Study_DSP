@@ -1,7 +1,6 @@
 #include "DSP2803x_Device.h"
 #include "DSP2803x_Examples.h"
-#include "key.h"
-#include "led.h"
+#include "Sci.h"
 
 void System_Init(void)
 {
@@ -21,12 +20,12 @@ int main(void)
 	
 	System_Init();
 
-	Led_Init();
-	Key_Init();
+	Sci_Init();
 
 	while(1)
 	{
-		LED = KEY;
+		SCITX('a');
+		DELAY_US(1000000);
 	}
 
 }
