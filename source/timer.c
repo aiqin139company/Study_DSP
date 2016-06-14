@@ -31,25 +31,33 @@ __interrupt void TIM0_ISR(void)
 __interrupt void TIM1_ISR(void)
 {
 
- 	//test interrupt nesting
-	//	int i;
-	short TempPIE = PieCtrlRegs.PIEIER1.all;
+	/*
+ 	//test interrupt nesting  1
+	IER |= 0x0001;
+	IER &= 0x0001;
+	PieCtrlRegs.PIEIER1.all &= 0x0040;		//timer0 interrupt
+	PieCtrlRegs.PIEACK.all = 0xFFFF;
+	asm("		NOP");
+	EINT;
+	while(1){}
+	*/
+
+	//test interrupt nesting  2
+	int i;
+	Uint16 TempPIE = PieCtrlRegs.PIEIER1.all;
 
 	IER |= 0x0001;
 	IER &= 0x0001;
-
 	PieCtrlRegs.PIEIER1.all &= 0x0040;		//timer0 interrupt
 	PieCtrlRegs.PIEACK.all = 0xFFFF;
 
 	asm("		NOP");
 	EINT;
+	for(i=0;i<30000;i++){}
+	DINT;
+	PieCtrlRegs.PIEIER1.all = TempPIE;
 
-//	for(i=0;i<30000;i++){}
 
-	while(1){}
-
-//	DINT;
-//	PieCtrlRegs.PIEIER1.all = TempPIE;
-
+	//normal
 //	PieCtrlRegs.PIEACK.all = 1;
 }
