@@ -2,6 +2,7 @@
 #include "DSP2803x_Examples.h"
 #include "timer.h"
 #include "led.h"
+#include "xint.h"
 
 void System_Init(void)
 {
@@ -18,11 +19,11 @@ void System_Init(void)
  */
 int main(void)
 {
-	
 	System_Init();
 
 	Led_Init();
 	Timer_Init();
+	Xint_Init();
 
 	while(1)
 	{
@@ -30,3 +31,5 @@ int main(void)
 	}
 
 }
+
+
