@@ -19,15 +19,26 @@ void System_Init(void)
  */
 int main(void)
 {
+	int i = 0,j=0;
 	System_Init();
 
 	Led_Init();
 	Timer_Init();
-	Xint_Init();
+//	Xint_Init();
+
+//	EALLOW;
+//  SysCtrlRegs.WDCR = 0;
+//  EDIS;
 
 	while(1)
 	{
-
+		for(i =0;i<10;i++)
+		{
+			j++;
+		}
+		EALLOW;
+		SysCtrlRegs.WDCR = 0;
+		EDIS;
 	}
 
 }

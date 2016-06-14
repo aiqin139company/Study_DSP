@@ -32,8 +32,8 @@
 								<option id="com.ti.ccstudio.buildDefinitions.C2000_6.4.compilerID.SILICON_VERSION.1060909312" name="Processor version (--silicon_version, -v)" superClass="com.ti.ccstudio.buildDefinitions.C2000_6.4.compilerID.SILICON_VERSION" value="com.ti.ccstudio.buildDefinitions.C2000_6.4.compilerID.SILICON_VERSION.28" valueType="enumerated"/>
 								<option id="com.ti.ccstudio.buildDefinitions.C2000_6.4.compilerID.INCLUDE_PATH.1255986648" name="Add dir to #include search path (--include_path, -I)" superClass="com.ti.ccstudio.buildDefinitions.C2000_6.4.compilerID.INCLUDE_PATH" valueType="includePath">
 									<listOptionValue builtIn="false" value="&quot;${CG_TOOL_ROOT}/include&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;C:\ti\ccs_workspace\test\headers&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;C:\ti\ccs_workspace\test\source&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/headers}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/source}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;C:\ti\controlSUITE\device_support\f2803x\v130\DSP2803x_common\include&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;C:\ti\controlSUITE\device_support\f2803x\v130\DSP2803x_headers\include&quot;"/>
 								</option>
