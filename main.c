@@ -1,17 +1,28 @@
-#include "DSP2803x_Device.h"
-#include "DSP2803x_Examples.h"
+#include "DSP28x_Project.h"     // DSP28x Headerfile
 #include "timer.h"
 #include "led.h"
-#include "xint.h"
+#include "cla.h"
+#include "Sci.h"
+
+// These are defined by the linker
+extern Uint16 RamfuncsLoadStart;
+extern Uint16 RamfuncsLoadSize;
+extern Uint16 RamfuncsRunStart;
 
 void System_Init(void)
 {
 	InitSysCtrl();
 	DINT;
 	InitPieCtrl();
-	IER = 0x0000;
-	IFR = 0x0000;
+	IER = 0x00000000;
+	IFR = 0x00000000;
 	InitPieVectTable();
+}
+
+void Interrupt_Enable(void)
+{
+	EINT;   // Enable Global interrupt INTM
+	ERTM;   // Enable Global realtime interrupt DBGM
 }
 
 /*
@@ -19,28 +30,24 @@ void System_Init(void)
  */
 int main(void)
 {
-	int i = 0,j=0;
+
+#ifdef FLASH
+	memcpy( (Uint16 *)&RamfuncsRunStart, (Uint16 *)&RamfuncsLoadStart, (unsigned long)&RamfuncsLoadSize);
+	InitFlash();
+#endif
+
 	System_Init();
+	CLA_C_Init();
 
-	Led_Init();
 	Timer_Init();
-//	Xint_Init();
+	Sci_Init();
 
-//	EALLOW;
-//  SysCtrlRegs.WDCR = 0;
-//  EDIS;
+	Interrupt_Enable();
 
 	while(1)
 	{
-		for(i =0;i<10;i++)
-		{
-			j++;
-		}
-		EALLOW;
-		SysCtrlRegs.WDCR = 0;
-		EDIS;
+		asm(" NOP");
 	}
 
 }
-
 

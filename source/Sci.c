@@ -30,17 +30,31 @@ void Sci_Init(void)
 	EDIS;
 }
 
+
 void SCITX(unsigned char dat)
 {
 	SciaRegs.SCITXBUF = dat;
 	//while(SciaRegs.SCIFFTX.bit.TXFFST == 0){}
 }
 
+
+/*
+void SCITX(int data)
+{
+	char i = 0;
+
+	for ( i = 4; i > 0; i -- )
+	{
+		SciaRegs.SCITXBUF = data>>((i-1)*8);
+		while(SciaRegs.SCIFFTX.bit.TXFFST == 0){}
+	}
+}
+*/
+
 unsigned char SCIRX(void)
 {
 	unsigned char dat = 0;
 
-	//while(SciaRegs.SCIFFRX.bit.RXFFST == 0) {}
 	dat = SciaRegs.SCIRXBUF.all;
 
 	return dat;
