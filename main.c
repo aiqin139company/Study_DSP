@@ -1,8 +1,8 @@
 #include "DSP28x_Project.h"     // DSP28x Headerfile
 #include "timer.h"
 #include "led.h"
-#include "cla.h"
 #include "Sci.h"
+#include "qep.h"
 
 // These are defined by the linker
 extern Uint16 RamfuncsLoadStart;
@@ -37,8 +37,7 @@ int main(void)
 #endif
 
 	System_Init();
-	CLA_C_Init();
-
+	Led_Init();
 	Timer_Init();
 	Sci_Init();
 

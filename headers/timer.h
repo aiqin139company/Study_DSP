@@ -5,12 +5,10 @@
 #include "DSP2803x_Examples.h"
 
 #include "Sci.h"
-#include "cla.h"
 
 __interrupt void TIM0_ISR(void);
 __interrupt void TIM1_ISR(void);
 
 void Timer_Init(void);
-
 
 #endif

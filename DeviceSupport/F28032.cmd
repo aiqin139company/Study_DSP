@@ -47,24 +47,13 @@
          be combined if required to create a larger memory block.
 */
 
-_Cla1Prog_Start = _Cla1funcsRunStart;
--heap 0x200
--stack 0x200
-
-// Define a size for the CLA scratchpad area that will be used
-// by the CLA compiler for local symbols and temps
-// Also force references to the special symbols that mark the
-// scratchpad are.
-// CLA_SCRATCHPAD_SIZE = 0x100;
---undef_sym=__cla_scratchpad_end
---undef_sym=__cla_scratchpad_start
+--diag_suppress=16002
 
 MEMORY
 {
 PAGE 0:    /* Program Memory */
            /* Memory (RAM/FLASH/OTP) blocks can be moved to PAGE1 for data allocation */
    RAML0       : origin = 0x008000, length = 0x000400     /* on-chip RAM block L0 */
-   RAML3       : origin = 0x009000, length = 0x001000     /* on-chip RAM block L3 */
    OTP         : origin = 0x3D7800, length = 0x000400     /* on-chip OTP */
 
    FLASHH      : origin = 0x3F0000, length = 0x001000     /* on-chip FLASH */
@@ -91,19 +80,10 @@ PAGE 1 :   /* Data Memory */
    BOOT_RSVD   : origin = 0x000000, length = 0x000050     /* Part of M0, BOOT rom will use this for stack */
    RAMM0       : origin = 0x000050, length = 0x0003B0     /* on-chip RAM block M0 */
    RAMM1       : origin = 0x000400, length = 0x000400     /* on-chip RAM block M1 */
-
-   CLARAM0     : origin = 0x008400, length = 0x000400
-   CLARAM1     : origin = 0x008800, length = 0x000400
-
-   RAML1       : origin = 0x008C00, length = 0x000A00     /* on-chip RAM block L1 */
-   RAML2       : origin = 0x009600, length = 0x000200     /* on-chip RAM block L2 */
-   RAML3       : origin = 0x009800, length = 0x001000     /* on-chip RAM block L3 */
-
-   CLA1_MSGRAMLOW   : origin = 0x001480, length = 0x000080
-   CLA1_MSGRAMHIGH  : origin = 0x001500, length = 0x000080
-
+   RAML1       : origin = 0x008400, length = 0x000A00     /* on-chip RAM block L1 */
+   RAML2       : origin = 0x008E00, length = 0x000200     /* on-chip RAM block L2 */
+   RAML3       : origin = 0x009000, length = 0x001000     /* on-chip RAM block L3 */
    FLASHB      : origin = 0x3F6000, length = 0x001000     /* on-chip FLASH */
-
 }
 
 /* Allocate sections to memory blocks.
@@ -138,36 +118,12 @@ SECTIONS
 
    /* Initalized sections go in Flash */
    /* For SDFlash to program these, they must be allocated to page 0 */
-   .econst             : > FLASHG      PAGE = 0		/*Constant data (e.g. const int k = 3;)*/
+   .econst             : > FLASHC      PAGE = 0		/*Constant data (e.g. const int k = 3;)*/
    .switch             : > FLASHA      PAGE = 0		/*Tables for switch statements*/
 
    /* Allocate IQ math areas: */
    IQmath              : > FLASHA      PAGE = 0            /* Math Code */
    IQmathTables        : > IQTABLES,   PAGE = 0, TYPE = NOLOAD
-
-	/* Allocate CLA areas*/
-   .bss_cla		       : > CLARAM1,    PAGE = 1
-   .scratchpad         : > CLARAM1,    PAGE = 1
-
-   Cla1Prog            : LOAD = FLASHC,
-                         RUN = RAML3,
-                         LOAD_START(_Cla1funcsLoadStart),
-                         LOAD_END(_Cla1funcsLoadEnd),
-                         RUN_START(_Cla1funcsRunStart),
-                         LOAD_SIZE(_Cla1funcsLoadSize),
-                         PAGE = 0
-
-   Cla1ToCpuMsgRAM     : > CLA1_MSGRAMLOW,   PAGE = 1
-   CpuToCla1MsgRAM     : > CLA1_MSGRAMHIGH,  PAGE = 1
-   Cla1DataRam0		   : > CLARAM0,		  PAGE = 1
-   Cla1DataRam1		   : > CLARAM1,		  PAGE = 1
-
-   CLAscratch          :
-                         { *.obj(CLAscratch)
-                         . += CLA_SCRATCHPAD_SIZE;
-                         *.obj(CLAscratch_end) } > CLARAM1,
-					     PAGE = 1
-
 
   /* Uncomment the section below if calling the IQNexp() or IQexp()
       functions from the IQMath.lib library in order to utilize the

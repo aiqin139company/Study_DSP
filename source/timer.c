@@ -1,7 +1,5 @@
 #include "timer.h"
 
-#define WAITSTEP 	asm(" RPT #255 || NOP")
-
 //Timer0 initialize
 void Timer_Init(void)
 {
@@ -20,10 +18,6 @@ void Timer_Init(void)
 //Timer0_ISR
 __interrupt void TIM0_ISR(void)
 {
-
-	SCITX(back);
-	Cla1ForceTask1andWait();
-	WAITSTEP;
 
 	GpioDataRegs.GPATOGGLE.bit.GPIO7 = 1;
 	PieCtrlRegs.PIEACK.bit.ACK1 = 1;
