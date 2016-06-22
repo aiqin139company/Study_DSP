@@ -18,7 +18,8 @@ void Timer_Init(void)
 __interrupt void TIM0_ISR(void)
 {
 	qep_speed.calc(&qep_speed);
-	GpioDataRegs.GPATOGGLE.bit.GPIO7 = 1;
+	printf("qep_cnt:%d \r\n",qep_speed.cnt);
+//	GpioDataRegs.GPATOGGLE.bit.GPIO7 = 1;
 	PieCtrlRegs.PIEACK.bit.ACK1 = 1;
 }
 

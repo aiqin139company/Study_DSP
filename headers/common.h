@@ -17,5 +17,6 @@
 #include "Sci.h"
 #include "qep.h"
 //#include "IQMathLib.h"
+#include "stdio.h"
 
 #endif /* HEADERS_COMMON_H_ */
