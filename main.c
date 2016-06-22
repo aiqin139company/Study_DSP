@@ -7,6 +7,13 @@ extern Uint16 RamfuncsRunStart;
 
 void System_Init(void)
 {
+#ifdef FLASH
+	memcpy( (Uint16 *)&RamfuncsRunStart, (Uint16 *)&RamfuncsLoadStart,
+			(unsigned long)&RamfuncsLoadSize);
+
+	InitFlash();
+#endif
+
 	InitSysCtrl();
 	DINT;
 	InitPieCtrl();
@@ -26,12 +33,6 @@ void Interrupt_Enable(void)
  */
 int main(void)
 {
-
-#ifdef FLASH
-	memcpy( (Uint16 *)&RamfuncsRunStart, (Uint16 *)&RamfuncsLoadStart, (unsigned long)&RamfuncsLoadSize);
-	InitFlash();
-#endif
-
 	System_Init();
 
 	Led_Init();

@@ -49,11 +49,9 @@ void POSSPEED_Calc(POSSPEED_TYPE *p)
 	p->dir = EQep1Regs.QEPSTS.bit.QDF;
 
 	p->oldcnt = p->cnt;
-//	p->cnt = EQep1Regs.QPOSCNT;
-	p->cnt = p->test;
+	p->cnt = EQep1Regs.QPOSCNT;
 
 	p->pos =  _IQmpy( _IQdiv( ( _IQ(p->cnt) - _IQ(p->oldcnt) ), _IQ(4096) ) , _IQ(360));
-
 	p->speed = _IQmpy( _IQdiv( _IQ(p->cnt) - _IQ(p->oldcnt) , _IQ(4096) ) , _IQ(6000));
 
 }
