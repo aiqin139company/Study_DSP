@@ -37,15 +37,17 @@ int main(void)
 #endif
 
 	System_Init();
+
 	Led_Init();
 	Timer_Init();
 	Sci_Init();
+	Qep_Init();
 
 	Interrupt_Enable();
 
 	while(1)
 	{
-		asm(" NOP");
+
 	}
 
 }
