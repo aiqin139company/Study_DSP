@@ -7,6 +7,8 @@
 
 #include "qep.h"
 
+POSSPEED_TYPE qep_speed = POSSPEED_DEFAULTS;
+
 void Qep_Init(void)
 {
 	EALLOW;
@@ -33,7 +35,8 @@ void POSSPEED_Init(void)
     EQep1Regs.QEPCTL.bit.PCRM=00;       // PCRM=00 mode - QPOSCNT reset on index event
     EQep1Regs.QEPCTL.bit.UTE=1;         // Unit Timeout Enable
     EQep1Regs.QEPCTL.bit.QCLM=1;        // Latch on unit time out
-    EQep1Regs.QPOSMAX=0xffffffff;
+    EQep1Regs.QPOSMAX = 0xffffffff;
+    EQep1Regs.QPOSCNT = 0;
     EQep1Regs.QEPCTL.bit.QPEN=1;        // QEP enable
 
     EQep1Regs.QCAPCTL.bit.UPPS=5;       // 1/32 for unit position
@@ -41,8 +44,16 @@ void POSSPEED_Init(void)
     EQep1Regs.QCAPCTL.bit.CEN=1;        // QEP Capture Enable
 }
 
-void POSSPEED_Calc(void)
+void POSSPEED_Calc(POSSPEED_TYPE *p)
 {
+	p->dir = EQep1Regs.QEPSTS.bit.QDF;
+
+	p->oldcnt = p->cnt;
+	p->cnt = EQep1Regs.QPOSCNT;
+
+	p->pos =  _IQmpy( _IQdiv( ( _IQ(p->cnt) - _IQ(p->oldcnt) ), _IQ(4096) ) , _IQ(360));
+
+	p->speed = _IQmpy( _IQdiv( _IQ(p->cnt) - _IQ(p->oldcnt) , _IQ(4096) ) , _IQ(6000));
 
 }
 

@@ -1,8 +1,7 @@
 #ifndef _XINT_H_
 #define _XINT_H_
 
-#include "DSP2803x_Device.h"
-#include "DSP2803x_Examples.h"
+#include "common.h"
 
 __interrupt void xint_isr(void);
 

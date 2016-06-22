@@ -1,8 +1,4 @@
-#include "DSP28x_Project.h"     // DSP28x Headerfile
-#include "timer.h"
-#include "led.h"
-#include "Sci.h"
-#include "qep.h"
+#include "common.h"
 
 // These are defined by the linker
 extern Uint16 RamfuncsLoadStart;
@@ -45,10 +41,14 @@ int main(void)
 
 	Interrupt_Enable();
 
+	qep_speed.init(&qep_speed);
+
 	while(1)
 	{
 
 	}
 
 }
+
+
 
