@@ -10,7 +10,7 @@
 
 #include "common.h"
 
-#define   GLOBAL_Q       16
+#define   GLOBAL_Q       15
 
 #include "IQMathLib.h"
 
@@ -22,6 +22,7 @@ typedef struct
 
 	int cnt;
 	int oldcnt;
+	int test;
 
 	void (*init)();
 	void (*calc)();
@@ -29,7 +30,7 @@ typedef struct
 
 typedef POSSPEED_TYPE *POSSPEED_PRT;
 
-#define POSSPEED_DEFAULTS { 0,0,0,0,0,(void (*)(long))POSSPEED_Init, (void (*)(long))POSSPEED_Calc }
+#define POSSPEED_DEFAULTS { 0,0,0,0,0,0,(void (*)(long))POSSPEED_Init, (void (*)(long))POSSPEED_Calc }
 
 extern POSSPEED_TYPE qep_speed;
 
