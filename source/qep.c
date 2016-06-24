@@ -35,7 +35,7 @@ void POSSPEED_Init(void)
     EQep1Regs.QEPCTL.bit.PCRM=00;       // PCRM=00 mode - QPOSCNT reset on index event
     EQep1Regs.QEPCTL.bit.UTE=1;         // Unit Timeout Enable
     EQep1Regs.QEPCTL.bit.QCLM=1;        // Latch on unit time out
-    EQep1Regs.QPOSMAX = 0xffffffff;
+    EQep1Regs.QPOSMAX = 0x0FA0;			//4000
     EQep1Regs.QPOSCNT = 0;
     EQep1Regs.QEPCTL.bit.QPEN=1;        // QEP enable
 
@@ -51,9 +51,8 @@ void POSSPEED_Calc(POSSPEED_TYPE *p)
 	p->oldcnt = p->cnt;
 	p->cnt = EQep1Regs.QPOSCNT;
 
-	p->pos =  _IQmpy( _IQdiv( ( _IQ(p->cnt) - _IQ(p->oldcnt) ), _IQ(4096) ) , _IQ(360));
-	p->speed = _IQmpy( _IQdiv( _IQ(p->cnt) - _IQ(p->oldcnt) , _IQ(4096) ) , _IQ(6000));
-
+	p->pos =  _IQmpy( _IQdiv( ( _IQ(p->cnt) - _IQ(p->oldcnt) ), _IQ(4000) ) , _IQ(360));
+	p->speed = _IQmpy( _IQdiv( _IQ(p->cnt) - _IQ(p->oldcnt) , _IQ(4000) ) , _IQ(6000));
 }
 
 

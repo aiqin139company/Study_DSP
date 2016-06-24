@@ -4,8 +4,8 @@
 #include "common.h"
 
 void Sci_Init(void);
-void SCITX(unsigned char dat);
-//void SCITX(int data);
+//void SCITX(unsigned char dat);
+void SCITX(long data);
 unsigned char SCIRX(void);
 
 #endif

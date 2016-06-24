@@ -3,8 +3,6 @@
 void Sci_Init(void)
 {
 	EALLOW;
-	SysCtrlRegs.PCLKCR0.bit.SCIAENCLK = 1;
-
 	GpioCtrlRegs.GPAPUD.bit.GPIO28 = 0;     // Enable pull-up for GPIO28  (SCIRXDA)
 	GpioCtrlRegs.GPAPUD.bit.GPIO29 = 0;
 
@@ -13,6 +11,11 @@ void Sci_Init(void)
 	/* Configure SCI-A pins MUX*/
 	GpioCtrlRegs.GPAMUX2.bit.GPIO28 = 1;
 	GpioCtrlRegs.GPAMUX2.bit.GPIO29 = 1;
+
+	/* scia_fifo_init */
+    SciaRegs.SCIFFTX.all=0xE040;
+    SciaRegs.SCIFFRX.all=0x2044;
+    SciaRegs.SCIFFCT.all=0x0;
 
 	SciaRegs.SCICCR.all =0x0007;   // 1 stop bit,  No loopback
 	                                   // No parity,8 char bits,
@@ -24,22 +27,21 @@ void Sci_Init(void)
 	SciaRegs.SCICTL2.bit.RXBKINTENA =1;
 	SciaRegs.SCIHBAUD    =0x0000;
 	SciaRegs.SCILBAUD    =0x0007;
-	SciaRegs.SCICCR.bit.LOOPBKENA =0; // Disable loop back
+//	SciaRegs.SCICCR.bit.LOOPBKENA = 1; // Enable loop back
 	SciaRegs.SCICTL1.all =0x0023;     // Relinquish SCI from Reset
 
 	EDIS;
 }
 
-
+/*
 void SCITX(unsigned char dat)
 {
 	SciaRegs.SCITXBUF = dat;
-	//while(SciaRegs.SCIFFTX.bit.TXFFST == 0){}
+	while(SciaRegs.SCIFFTX.bit.TXFFST == 0){}
 }
+*/
 
-
-/*
-void SCITX(int data)
+void SCITX(long data)
 {
 	char i = 0;
 
@@ -48,6 +50,14 @@ void SCITX(int data)
 		SciaRegs.SCITXBUF = data>>((i-1)*8);
 		while(SciaRegs.SCIFFTX.bit.TXFFST == 0){}
 	}
+}
+
+/*
+int fputc(int c,FILE *file)
+{
+	SciaRegs.SCITXBUF = c;
+	while( 0 == SciaRegs.SCIFFTX.bit.TXFFST );
+	return c;
 }
 */
 

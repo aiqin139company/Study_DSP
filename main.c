@@ -35,18 +35,21 @@ int main(void)
 {
 	System_Init();
 
-	Led_Init();
-	Timer_Init();
+//	Led_Init();
+//	Timer_Init();
 	Sci_Init();
-	Qep_Init();
+//	Qep_Init();
+
+//	EPWM_Init();
 
 	Interrupt_Enable();
 
-	qep_speed.init(&qep_speed);
+//	qep_speed.init(&qep_speed);
 
 	while(1)
 	{
-
+		SCITX(0x12345678);
+		DELAY_US(1000000);
 	}
 
 }
