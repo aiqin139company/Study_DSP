@@ -28,28 +28,53 @@ void Interrupt_Enable(void)
 	ERTM;   // Enable Global realtime interrupt DBGM
 }
 
+void Delay_us(long timer)
+{
+	while(timer--);
+}
+
 /*
  * main.c
  */
 int main(void)
 {
+	uchar key,motorEn = 0;
 	System_Init();
 
 //	Led_Init();
-//	Timer_Init();
-	Sci_Init();
-//	Qep_Init();
+	Timer_Init();
+	Key_Init();
+//	Sci_Init();
+	Qep_Init();
 
-//	EPWM_Init();
+//	Motor_Init();
+
+	EPWM_Init();
 
 	Interrupt_Enable();
 
-//	qep_speed.init(&qep_speed);
+	qep_speed.init(&qep_speed);
 
 	while(1)
 	{
-		SCITX(0x12345678);
-		DELAY_US(1000000);
+		key = Key_Scan();
+
+		if ( 1 == key )
+		{
+			motorEn = 1;
+		}
+
+		if ( 2 == key )
+		{
+			Motor_Disable();
+			motorEn = 0;
+			EQep1Regs.QPOSCNT = 0;
+			printf("qep_cnt:%d\r\n",qep_speed.cnt);
+		}
+
+		if ( motorEn )
+			Motor_Enable();
+
 	}
 
 }

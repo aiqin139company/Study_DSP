@@ -27,6 +27,7 @@ void Qep_Init(void)
 
 void POSSPEED_Init(void)
 {
+	EALLOW;
     EQep1Regs.QUPRD=600000;         // Unit Timer for 100Hz at 60 MHz SYSCLKOUT
 
     EQep1Regs.QDECCTL.bit.QSRC=00;      // QEP quadrature count mode
@@ -42,6 +43,7 @@ void POSSPEED_Init(void)
     EQep1Regs.QCAPCTL.bit.UPPS=5;       // 1/32 for unit position
     EQep1Regs.QCAPCTL.bit.CCPS=6;       // 1/64 for CAP clock
     EQep1Regs.QCAPCTL.bit.CEN=1;        // QEP Capture Enable
+    EDIS;
 }
 
 void POSSPEED_Calc(POSSPEED_TYPE *p)

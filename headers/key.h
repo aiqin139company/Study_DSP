@@ -3,9 +3,15 @@
 
 #include "common.h"
 
-#define KEY	GpioDataRegs.GPADAT.bit.GPIO18
+#define uchar unsigned char
+
+#define KEY1	GpioDataRegs.GPADAT.bit.GPIO14
+#define KEY2	GpioDataRegs.GPADAT.bit.GPIO13
+#define KEY3	GpioDataRegs.GPADAT.bit.GPIO15
 
 void Key_Init(void);
+
+uchar Key_Scan(void);
 
 #endif
 

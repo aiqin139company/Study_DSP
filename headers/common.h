@@ -16,8 +16,10 @@
 #include "led.h"
 #include "Sci.h"
 #include "qep.h"
-//#include "IQMathLib.h"
 #include "stdio.h"
 #include "pwm.h"
+#include "motor.h"
+
+void Delay_us(long timer);
 
 #endif /* HEADERS_COMMON_H_ */
