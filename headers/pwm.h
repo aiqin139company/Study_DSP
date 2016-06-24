@@ -10,7 +10,6 @@
 
 #include "common.h"
 
-void EPWM_Init(void);
-void InitEPwm1Example();
+void EPWM_Init(int CLKDIV, int TBPRD, int CMP);
 
 #endif /* HEADERS_PWM_H_ */

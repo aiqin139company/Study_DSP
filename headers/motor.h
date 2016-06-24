@@ -10,8 +10,9 @@
 
 #include "common.h"
 
-#define EPWM1A 	GpioDataRegs.GPADAT.bit.GPIO0
-#define EPWM1B 	GpioDataRegs.GPADAT.bit.GPIO1
+#define EPWM1A 	EPwm1Regs.CMPA.half.CMPA
+#define EPWM1B 	EPwm1Regs.CMPB
+
 #define EPWM2A 	GpioDataRegs.GPADAT.bit.GPIO2
 #define EPWM2B 	GpioDataRegs.GPADAT.bit.GPIO3
 

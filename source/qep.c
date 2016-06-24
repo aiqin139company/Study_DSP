@@ -7,8 +7,6 @@
 
 #include "qep.h"
 
-POSSPEED_TYPE qep_speed = POSSPEED_DEFAULTS;
-
 void Qep_Init(void)
 {
 	EALLOW;
@@ -44,17 +42,29 @@ void POSSPEED_Init(void)
     EQep1Regs.QCAPCTL.bit.CCPS=6;       // 1/64 for CAP clock
     EQep1Regs.QCAPCTL.bit.CEN=1;        // QEP Capture Enable
     EDIS;
+
+    /*
+    EALLOW;
+    EQep1Regs.QEINT.bit.PCO = 1;		//overflow
+    IER |= M_INT5;
+    PieCtrlRegs.PIEIER5.bit.INTx1 = 1;
+    PieVectTable.EQEP1_INT = &EQEP_ISR;
+    EDIS;
+    */
 }
 
-void POSSPEED_Calc(POSSPEED_TYPE *p)
+__interrupt void EQEP_ISR(void)
 {
-	p->dir = EQep1Regs.QEPSTS.bit.QDF;
 
-	p->oldcnt = p->cnt;
-	p->cnt = EQep1Regs.QPOSCNT;
+	if ( 1 == EQep1Regs.QFLG.bit.PCO )
+	{
+		EQep1Regs.QCLR.bit.PCO = 1;
+		long cnt = EQep1Regs.QPOSCNT;
+		EQep1Regs.QPOSCNT = 0;
+		printf("qep_cnt:%ld \r\n",cnt);
+	}
 
-	p->pos =  _IQmpy( _IQdiv( ( _IQ(p->cnt) - _IQ(p->oldcnt) ), _IQ(4000) ) , _IQ(360));
-	p->speed = _IQmpy( _IQdiv( _IQ(p->cnt) - _IQ(p->oldcnt) , _IQ(4000) ) , _IQ(6000));
+	PieCtrlRegs.PIEACK.bit.ACK5 = 1;
 }
 
 

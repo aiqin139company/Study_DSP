@@ -10,32 +10,9 @@
 
 #include "common.h"
 
-#define   GLOBAL_Q       15
-
-#include "IQMathLib.h"
-
-typedef struct
-{
-	int dir;
-	_iq pos;
-	_iq speed;
-
-	int cnt;
-	int oldcnt;
-	int test;
-
-	void (*init)();
-	void (*calc)();
-} POSSPEED_TYPE;
-
-typedef POSSPEED_TYPE *POSSPEED_PRT;
-
-#define POSSPEED_DEFAULTS { 0,0,0,0,0,0,(void (*)(long))POSSPEED_Init, (void (*)(long))POSSPEED_Calc }
-
-extern POSSPEED_TYPE qep_speed;
-
 void Qep_Init(void);
 void POSSPEED_Init(void);
-void POSSPEED_Calc(POSSPEED_PRT);
+__interrupt void EQEP_ISR(void);
+
 
 #endif /* HEADERS_QEP_H_ */

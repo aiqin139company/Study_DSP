@@ -8,6 +8,10 @@
 #ifndef HEADERS_COMMON_H_
 #define HEADERS_COMMON_H_
 
+#ifndef uchar
+#define uchar unsigned char
+#endif
+
 #include "DSP2803x_Device.h"
 #include "DSP2803x_Examples.h"
 #include "timer.h"
@@ -19,6 +23,8 @@
 #include "stdio.h"
 #include "pwm.h"
 #include "motor.h"
+
+extern uchar motorEn;
 
 void Delay_us(long timer);
 

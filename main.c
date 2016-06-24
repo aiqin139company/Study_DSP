@@ -38,42 +38,42 @@ void Delay_us(long timer)
  */
 int main(void)
 {
-	uchar key,motorEn = 0;
+
 	System_Init();
 
-//	Led_Init();
-	Timer_Init();
 	Key_Init();
-//	Sci_Init();
-	Qep_Init();
+//	Qep_Init();
+	Motor_Init();
 
-//	Motor_Init();
-
-	EPWM_Init();
-
+	EPWM_Init(10,400,300);
+	Motor_Disable();
+	Timer_Init();
 	Interrupt_Enable();
-
-	qep_speed.init(&qep_speed);
 
 	while(1)
 	{
-		key = Key_Scan();
 
-		if ( 1 == key )
-		{
-			motorEn = 1;
-		}
-
-		if ( 2 == key )
-		{
-			Motor_Disable();
-			motorEn = 0;
-			EQep1Regs.QPOSCNT = 0;
-			printf("qep_cnt:%d\r\n",qep_speed.cnt);
-		}
-
-		if ( motorEn )
+	/*
+//		if ( motorEn )
 			Motor_Enable();
+
+		if ( 0 == EQep1Regs.QPOSCNT )
+		{
+			CpuTimer0Regs.TIM.all = 0;
+			CpuTimer0Regs.TCR.bit.TSS = 1;
+		}
+
+		if ( EQep1Regs.QPOSCNT >= 4000 )
+		{
+			timer_cnt = CpuTimer0Regs.TIM.all;
+			CpuTimer0Regs.TCR.bit.TSS = 0;
+			EQep1Regs.QPOSCNT = 0;
+			printf("time: %ld ms\r\n",timer_cnt/60000);
+		}
+
+		*/
+
+
 
 	}
 
