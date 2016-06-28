@@ -7,10 +7,6 @@
 
 #include "cap.h"
 
-Uint32 DutyOnTime1;
-Uint32 DutyOffTime1;
-Uint32 Period1;
-
 void eCAP_Init(void)
 {
 	//GPIO Config
@@ -33,9 +29,8 @@ void eCAP_Init(void)
 
 	// Configure peripheral registers
 	ECap1Regs.ECCTL2.bit.CONT_ONESHT = 1;      // One-shot
-	ECap1Regs.ECCTL2.bit.STOP_WRAP = 1;        // Stop at 2 events
+	ECap1Regs.ECCTL2.bit.STOP_WRAP = 0;        // Stop at 1 event
 	ECap1Regs.ECCTL1.bit.CAP1POL = 0;          // Rising edge
-	ECap1Regs.ECCTL1.bit.CAP2POL = 1;          // Falling edge
 	ECap1Regs.ECCTL1.bit.CTRRST1 = 1;          // Difference operation
 	ECap1Regs.ECCTL1.bit.CTRRST2 = 1;          // Difference operation
 	ECap1Regs.ECCTL2.bit.SYNCI_EN = 1;         // Enable sync in
@@ -45,7 +40,7 @@ void eCAP_Init(void)
 	ECap1Regs.ECCTL2.bit.TSCTRSTOP = 1;        // Start Counter
 	ECap1Regs.ECCTL2.bit.REARM = 1;            // arm one-shot
 	ECap1Regs.ECCTL1.bit.CAPLDEN = 1;          // Enable CAP1-CAP4 register loads
-	ECap1Regs.ECEINT.bit.CEVT2 = 1;            // 2 events = interrupt
+	ECap1Regs.ECEINT.bit.CEVT1 = 1;            // 1 event = interrupt
 	EDIS;
 
 	//Interrupt Config
@@ -60,14 +55,12 @@ void eCAP_Init(void)
 
 __interrupt void eCAP_ISR(void)
 {
-	DutyOnTime1 = ECap1Regs.CAP2;
-	DutyOffTime1 = ECap1Regs.CAP1;
-
-	Period1 = DutyOnTime1 + DutyOffTime1;
+	Uint32 Period1;
+	Period1 = ECap1Regs.CAP1;
 	SCITX(Period1);
 
 	//CLR Interrupt Flag
-	ECap1Regs.ECCLR.bit.CEVT2 = 1;
+	ECap1Regs.ECCLR.bit.CEVT1 = 1;
 	ECap1Regs.ECCLR.bit.INT = 1;
 	ECap1Regs.ECCTL2.bit.REARM = 1;
 	PieCtrlRegs.PIEACK.bit.ACK4 = 1;

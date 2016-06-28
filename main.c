@@ -61,7 +61,6 @@ int main(void)
 			else
 				Motor_Disable();
 		}
-
 	}
 
 }
