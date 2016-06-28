@@ -8,5 +8,7 @@ void Sci_Init(void);
 void SCITX(long data);
 long SCIRX(void);
 
+__interrupt void SCI_RX_ISR(void);
+
 #endif
 

@@ -6,14 +6,37 @@
  */
 
 #include "cap.h"
+Uint32 Period1;
+
+#ifdef TEST_PIN
+#define T_Pin  GpioDataRegs.GPBDAT.bit.GPIO39
+void Test_Pin(void)
+{
+	EALLOW;
+	GpioCtrlRegs.GPBMUX1.bit.GPIO39 = 0;
+	GpioCtrlRegs.GPBDIR.bit.GPIO39 = 1;
+	GpioDataRegs.GPBDAT.bit.GPIO39 = 0;
+	EDIS;
+}
+#endif
 
 void eCAP_Init(void)
 {
+#ifdef TEST_PIN
+	Test_Pin();
+#endif
 	//GPIO Config
 	EALLOW;
 	GpioCtrlRegs.GPAPUD.bit.GPIO19 = 0;     // Enable pull-up on GPIO19 (CAP1)
 	GpioCtrlRegs.GPAQSEL2.bit.GPIO19 = 0;   // Synch to SYSCLKOUT GPIO19 (CAP1)
 	GpioCtrlRegs.GPAMUX2.bit.GPIO19 = 3;    // Configure GPIO19 as CAP1
+	EDIS;
+
+	//Interrupt Config
+	EALLOW;
+	PieVectTable.ECAP1_INT = &eCAP_ISR;
+	IER |= M_INT4;						// Enable CPU INT4 which is connected to ECAP1-4 INT:
+	PieCtrlRegs.PIEIER4.bit.INTx1 = 1;	// Enable eCAP INTn in the PIE: Group 3 interrupt 1-6
 	EDIS;
 
 	// Code snippet for CAP mode Delta Time, Rising and Falling
@@ -43,19 +66,14 @@ void eCAP_Init(void)
 	ECap1Regs.ECEINT.bit.CEVT1 = 1;            // 1 event = interrupt
 	EDIS;
 
-	//Interrupt Config
-	EALLOW;
-	PieVectTable.ECAP1_INT = &eCAP_ISR;
-	IER |= M_INT4;						// Enable CPU INT4 which is connected to ECAP1-4 INT:
-	PieCtrlRegs.PIEIER4.bit.INTx1 = 1;	// Enable eCAP INTn in the PIE: Group 3 interrupt 1-6
-	EDIS;
-
 }
-
 
 __interrupt void eCAP_ISR(void)
 {
-	Uint32 Period1;
+#ifdef TEST_PIN
+	T_Pin = 1;
+#endif
+
 	Period1 = ECap1Regs.CAP1;
 	SCITX(Period1);
 
@@ -64,6 +82,10 @@ __interrupt void eCAP_ISR(void)
 	ECap1Regs.ECCLR.bit.INT = 1;
 	ECap1Regs.ECCTL2.bit.REARM = 1;
 	PieCtrlRegs.PIEACK.bit.ACK4 = 1;
+
+#ifdef TEST_PIN
+	T_Pin = 0;
+#endif
 }
 
 

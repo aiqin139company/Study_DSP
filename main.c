@@ -38,12 +38,9 @@ void Delay_us(long timer)
  */
 int main(void)
 {
-//	uchar toggle = 0;
-//	uchar key;
 	long flag = 0;
-
 	System_Init();
-	//moudles initial
+	//modules initial
 	Sci_Init();
 	Motor_Init();
 	eCAP_Init();
@@ -53,16 +50,15 @@ int main(void)
 	while(1)
 	{
 		flag = SCIRX();
-		if ( 0xAA00 == flag )
+		if ( 0xA0A0 == flag )
 		{
 			Motor_Enable();
 		}
 
-		if ( 0x00AA == flag )
+		if ( 0x0A0A == flag )
 		{
 			Motor_Disable();
 		}
-
 	}
 
 }
