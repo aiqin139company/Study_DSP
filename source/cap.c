@@ -6,6 +6,7 @@
  */
 
 #include "cap.h"
+
 Uint32 Period1;
 
 #ifdef TEST_PIN
