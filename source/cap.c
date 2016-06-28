@@ -33,7 +33,7 @@ void eCAP_Init(void)
 
 	// Configure peripheral registers
 	ECap1Regs.ECCTL2.bit.CONT_ONESHT = 1;      // One-shot
-	ECap1Regs.ECCTL2.bit.STOP_WRAP = 2;        // Stop at 4 events
+	ECap1Regs.ECCTL2.bit.STOP_WRAP = 1;        // Stop at 2 events
 	ECap1Regs.ECCTL1.bit.CAP1POL = 0;          // Rising edge
 	ECap1Regs.ECCTL1.bit.CAP2POL = 1;          // Falling edge
 	ECap1Regs.ECCTL1.bit.CTRRST1 = 1;          // Difference operation
@@ -45,7 +45,7 @@ void eCAP_Init(void)
 	ECap1Regs.ECCTL2.bit.TSCTRSTOP = 1;        // Start Counter
 	ECap1Regs.ECCTL2.bit.REARM = 1;            // arm one-shot
 	ECap1Regs.ECCTL1.bit.CAPLDEN = 1;          // Enable CAP1-CAP4 register loads
-	ECap1Regs.ECEINT.bit.CEVT1 = 1;            // 4 events = interrupt
+	ECap1Regs.ECEINT.bit.CEVT2 = 1;            // 2 events = interrupt
 	EDIS;
 
 	//Interrupt Config
@@ -63,12 +63,11 @@ __interrupt void eCAP_ISR(void)
 	DutyOnTime1 = ECap1Regs.CAP2;
 	DutyOffTime1 = ECap1Regs.CAP1;
 
-//	Period1 = DutyOnTime1 + DutyOffTime1;
-//	SCITX(Period1);
-	SCITX(DutyOffTime1);
+	Period1 = DutyOnTime1 + DutyOffTime1;
+	SCITX(Period1);
 
 	//CLR Interrupt Flag
-	ECap1Regs.ECCLR.bit.CEVT1 = 1;
+	ECap1Regs.ECCLR.bit.CEVT2 = 1;
 	ECap1Regs.ECCLR.bit.INT = 1;
 	ECap1Regs.ECCTL2.bit.REARM = 1;
 	PieCtrlRegs.PIEACK.bit.ACK4 = 1;

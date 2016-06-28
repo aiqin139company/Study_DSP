@@ -38,6 +38,9 @@ void Delay_us(long timer)
  */
 int main(void)
 {
+	uchar toggle = 0;
+	uchar key;
+
 	System_Init();
 	//moudles initial
 	Key_Init();
@@ -50,31 +53,32 @@ int main(void)
 
 	while(1)
 	{
-		static uchar toggle = 0;
-		uchar key;
-
 		key = Key_Scan();
-
-		if ( 1 == key )
+		if ( key )
 		{
-			toggle = !toggle;
-			if ( toggle )
-				Motor_Enable();
-			else
-				Motor_Disable();
+			if ( 1 == key )
+			{
+				toggle = !toggle;
+				if ( toggle )
+					Motor_Enable();
+				else
+					Motor_Disable();
+			}
+
+			if ( 2 == key )
+			{
+				EPWM1A -= 10;
+				EPWM1B -= 10;
+			}
+
+			if ( 3 == key )
+			{
+				EPWM1A += 10;
+				EPWM1B += 10;
+			}
+
 		}
 
-		if ( 2 == key )
-		{
-			EPWM1A -= 10;
-			EPWM1B -= 10;
-		}
-
-		if ( 3 == key )
-		{
-			EPWM1A += 10;
-			EPWM1B += 10;
-		}
 	}
 
 }

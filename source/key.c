@@ -24,7 +24,7 @@ uchar Key_Scan(void)
 	if ( ( 0 == KEY1 || 0 == KEY2 || 0 == KEY3 ) && flag )
 	{
 		flag = 0;
-		//Delay_us(10000);				//delay 10ms
+		Delay_us(10000);				//delay 10ms
 		if ( 0 == KEY1 ) return 1;
 		if ( 0 == KEY2 ) return 2;
 		if ( 0 == KEY3 ) return 3;
