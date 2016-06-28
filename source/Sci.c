@@ -61,11 +61,16 @@ int fputc(int c,FILE *file)
 }
 */
 
-unsigned char SCIRX(void)
+long SCIRX(void)
 {
-	unsigned char dat = 0;
+	long dat = 0;
+	uchar i;
 
-	dat = SciaRegs.SCIRXBUF.all;
+	for (i = 0; i < 4; i++ )
+	{
+		while(SciaRegs.SCIFFRX.bit.RXFFST == 0){}
+		dat += (long)( SciaRegs.SCIRXBUF.all ) << i*8;
+	}
 
 	return dat;
 }
