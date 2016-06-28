@@ -45,7 +45,6 @@ int main(void)
 	//moudles initial
 	Key_Init();
 	Sci_Init();
-//	Timer_Init();
 	Motor_Init();
 	eCAP_Init();
 	//enable glabol interrupt
@@ -54,29 +53,13 @@ int main(void)
 	while(1)
 	{
 		key = Key_Scan();
-		if ( key )
+		if ( 1 == key )
 		{
-			if ( 1 == key )
-			{
-				toggle = !toggle;
-				if ( toggle )
-					Motor_Enable();
-				else
-					Motor_Disable();
-			}
-
-			if ( 2 == key )
-			{
-				EPWM1A -= 10;
-				EPWM1B -= 10;
-			}
-
-			if ( 3 == key )
-			{
-				EPWM1A += 10;
-				EPWM1B += 10;
-			}
-
+			toggle = !toggle;
+			if ( toggle )
+				Motor_Enable();
+			else
+				Motor_Disable();
 		}
 
 	}
