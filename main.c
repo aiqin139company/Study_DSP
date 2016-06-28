@@ -38,43 +38,43 @@ void Delay_us(long timer)
  */
 int main(void)
 {
-
 	System_Init();
-
+	//moudles initial
 	Key_Init();
-//	Qep_Init();
+	Sci_Init();
+//	Timer_Init();
 	Motor_Init();
-
-	EPWM_Init(10,400,300);
-	Motor_Disable();
-	Timer_Init();
+	eCAP_Init();
+	//enable glabol interrupt
 	Interrupt_Enable();
 
 	while(1)
 	{
+		static uchar toggle = 0;
+		uchar key;
 
-	/*
-//		if ( motorEn )
-			Motor_Enable();
+		key = Key_Scan();
 
-		if ( 0 == EQep1Regs.QPOSCNT )
+		if ( 1 == key )
 		{
-			CpuTimer0Regs.TIM.all = 0;
-			CpuTimer0Regs.TCR.bit.TSS = 1;
+			toggle = !toggle;
+			if ( toggle )
+				Motor_Enable();
+			else
+				Motor_Disable();
 		}
 
-		if ( EQep1Regs.QPOSCNT >= 4000 )
+		if ( 2 == key )
 		{
-			timer_cnt = CpuTimer0Regs.TIM.all;
-			CpuTimer0Regs.TCR.bit.TSS = 0;
-			EQep1Regs.QPOSCNT = 0;
-			printf("time: %ld ms\r\n",timer_cnt/60000);
+			EPWM1A -= 10;
+			EPWM1B -= 10;
 		}
 
-		*/
-
-
-
+		if ( 3 == key )
+		{
+			EPWM1A += 10;
+			EPWM1B += 10;
+		}
 	}
 
 }

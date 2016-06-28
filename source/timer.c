@@ -14,8 +14,6 @@ void Timer_Init(void)
 	EALLOW;
 	PieVectTable.TINT0 = &TIM0_ISR;
 	EDIS;
-
-
 }
 
 //Timer0_ISR
@@ -37,14 +35,14 @@ __interrupt void TIM0_ISR(void)
 
 	if ( 2 == key )
 	{
-		EPWM1A -= 20;
-		EPWM1B -= 20;
+		EPWM1A -= 10;
+		EPWM1B -= 10;
 	}
 
 	if ( 3 == key )
 	{
-		EPWM1A += 20;
-		EPWM1B += 20;
+		EPWM1A += 10;
+		EPWM1B += 10;
 	}
 
 	PieCtrlRegs.PIEACK.bit.ACK1 = 1;

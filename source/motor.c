@@ -8,6 +8,7 @@
 
 void Motor_Init(void)
 {
+	//Gpio Config
 	EALLOW;
 	GpioCtrlRegs.GPAMUX1.bit.GPIO2 = 0;
 	GpioCtrlRegs.GPAMUX1.bit.GPIO3 = 0;
@@ -16,12 +17,16 @@ void Motor_Init(void)
 	GpioDataRegs.GPADAT.bit.GPIO2 = 0;
 	GpioDataRegs.GPADAT.bit.GPIO3 = 0;
 	EDIS;
+
+	//ePWM module initial
+	EPWM_Init(10,400,300);
+	Motor_Disable();
 }
 
 void Motor_Enable(void)
 {
-	EPWM1A = 300;
-	EPWM1B = 300;
+	EPWM1A = 10;
+	EPWM1B = 10;
 }
 
 void Motor_Disable(void)

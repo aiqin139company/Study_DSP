@@ -14,7 +14,6 @@ void Key_Init(void)
 	GpioDataRegs.GPACLEAR.bit.GPIO14 = 1;
 	GpioDataRegs.GPACLEAR.bit.GPIO13 = 1;
 	GpioDataRegs.GPACLEAR.bit.GPIO15 = 1;
-
 	EDIS;
 }
 

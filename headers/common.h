@@ -23,6 +23,7 @@
 #include "stdio.h"
 #include "pwm.h"
 #include "motor.h"
+#include "cap.h"
 
 extern uchar motorEn;
 
