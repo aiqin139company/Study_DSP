@@ -1,18 +1,17 @@
 import sys
 import serial
-import csv
-import math
 import struct
-import time
 
+#ser_write method
 def ser_write(data):
 	writeData = data
 	writeBuff = struct.pack('l', writeData)
 	ser.write(writeBuff)
-	
+
 if len(sys.argv) != 2:
 	print 'Invalid usage, format is: ' 
 	print '\t %s "COMx"' % (sys.argv[0])
+	sys.exit()
 else:
 	portName = sys.argv[1]
 	
@@ -23,34 +22,34 @@ ser.timeout = 10.0
 
 print "Opening serial port: " + portName
 ser.open()
-MAX_SAMPLES = 40000
-TEST_MAX = 5
-motorSpeed = 15
 
 if not ser.is_open:
 	print "Count not open serial port '%s'" % portName
 else:	
-	times = 0
-	samples = 0
-	dataList = []
-	timedOut = False;
 	
+	motorSpeed = 15
+	
+	#Setting motor speed
 	ser_write(0xAAAA)
-	print "setting the motor speed!"
+	print "Setting the motor speed!"
 	ser_write(motorSpeed)
 	
+	#Starting 
 	ser_write(0xA0A0)
-	print "starting the motor!"
+	print "Starting the motor!"
+	print "Testting encoder, please waiting 10s!"
 	
+	#waiting for read faild msg!
 	sciData = ser.read(4)
 	
 	if 0 == ser.inWaiting():
-		print "the encoder test ok!"
+		print "The encoder test ok!"
 	else :
 		dat = (struct.unpack(">l", sciData))[0]
 		if 0xFFFF == dat :
-			print "the encoder test faild!"
+			print "The encoder test faild!"
 	
+	#Stopping the motor
 	ser_write(0x0A0A)	
-	print "starting the motor!"
+	print "Stopping the motor!"
 	
