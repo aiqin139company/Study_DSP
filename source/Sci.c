@@ -38,7 +38,7 @@ void SCITX(long data)
 
 	for ( i = 4; i > 0; i -- )
 	{
-		while(SciaRegs.SCIFFTX.bit.TXFFST == 4){}		//waitting for if tx fifo has 4 words
+		while( 4 == SciaRegs.SCIFFTX.bit.TXFFST ){}		//waitting for if tx fifo has 4 words
 		SciaRegs.SCITXBUF = data>>((i-1)*8);
 	}
 }
@@ -51,7 +51,7 @@ long SCIRX(void)
 
 	for (i = 0; i < 4; i++ )
 	{
-		while(SciaRegs.SCIFFRX.bit.RXFFST == 0){}
+		while( 0 == SciaRegs.SCIFFRX.bit.RXFFST ){}		//waitting for rx
 		dat += (long)( SciaRegs.SCIRXBUF.all ) << i*8;
 	}
 

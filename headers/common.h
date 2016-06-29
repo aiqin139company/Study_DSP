@@ -16,16 +16,12 @@
 #include "DSP2803x_Examples.h"
 #include "timer.h"
 #include "key.h"
-#include "Xint.h"
-#include "led.h"
 #include "Sci.h"
-#include "qep.h"
-#include "stdio.h"
+//#include "qep.h"
 #include "pwm.h"
 #include "motor.h"
+#include "LowPassfilter.h"
 #include "cap.h"
-
-extern uchar motorEn;
 
 void Delay_us(long timer);
 

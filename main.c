@@ -39,6 +39,7 @@ void Delay_us(long timer)
 int main(void)
 {
 	long flag = 0;
+	char epwm = 20;
 	System_Init();
 
 	//modules initial
@@ -49,17 +50,25 @@ int main(void)
 	//enable glabol interrupt
 	Interrupt_Enable();
 
+	LowPass_Params(&LP,_IQ(0.9));
+
 	while(1)
 	{
 		flag = SCIRX();
+		if ( 0xAAAA == flag )
+		{
+			epwm = SCIRX();
+		}
+
 		if ( 0xA0A0 == flag )
 		{
 			PIE_eCAP_CNT();
-			Motor_Enable();
+			Motor_Enable(epwm);
 		}
 
 		if ( 0x0A0A == flag )
 		{
+			SCITX(LP.Out);
 			Motor_Disable();
 		}
 	}

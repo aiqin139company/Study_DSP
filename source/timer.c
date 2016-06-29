@@ -28,7 +28,7 @@ __interrupt void TIM0_ISR(void)
 	{
 		toggle = !toggle;
 		if ( toggle )
-			Motor_Enable();
+			Motor_Enable(20);
 		else
 			Motor_Disable();
 	}

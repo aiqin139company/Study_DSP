@@ -17,7 +17,7 @@
 #define EPWM2B 	GpioDataRegs.GPADAT.bit.GPIO3
 
 void Motor_Init(void);
-void Motor_Enable(void);
+void Motor_Enable(char epwm);
 void Motor_Disable(void);
 
 #endif /* HEADERS_MOTOR_H_ */

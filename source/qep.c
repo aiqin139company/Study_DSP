@@ -61,7 +61,6 @@ __interrupt void EQEP_ISR(void)
 		EQep1Regs.QCLR.bit.PCO = 1;
 		long cnt = EQep1Regs.QPOSCNT;
 		EQep1Regs.QPOSCNT = 0;
-		printf("qep_cnt:%ld \r\n",cnt);
 	}
 
 	PieCtrlRegs.PIEACK.bit.ACK5 = 1;

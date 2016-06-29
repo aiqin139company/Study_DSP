@@ -28,6 +28,8 @@
 	PieVectTable.ECAP1_INT = &eCAP_ISR;	\
 	EDIS;
 
+
+
 void eCAP_Init(void);
 __interrupt void eCAP_CNT(void);
 __interrupt void eCAP_ISR(void);

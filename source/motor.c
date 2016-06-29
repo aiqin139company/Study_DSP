@@ -23,10 +23,10 @@ void Motor_Init(void)
 	Motor_Disable();
 }
 
-void Motor_Enable(void)
+void Motor_Enable(char epwm)
 {
-	EPWM1A = 15;
-	EPWM1B = 15;
+	EPWM1A = epwm;
+	EPWM1B = epwm;
 }
 
 void Motor_Disable(void)

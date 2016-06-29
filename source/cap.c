@@ -9,6 +9,8 @@
 
 Uint32 period = 0;
 
+LowPassFilter LP;
+
 #ifdef TEST_PIN
 #define T_Pin  GpioDataRegs.GPBDAT.bit.GPIO39
 void Test_Pin(void)
@@ -93,8 +95,10 @@ __interrupt void eCAP_ISR(void)
 	T_Pin = 1;
 #endif
 
-	period = ECap1Regs.CAP1;
-	SCITX(period);					//too fast
+//	period = ECap1Regs.CAP1;
+//	SCITX(period);					//too fast
+	LP.In = ECap1Regs.CAP1;
+	LowPass(&LP);
 
 	//CLR Interrupt Flag
 	eCAP_ACK();
