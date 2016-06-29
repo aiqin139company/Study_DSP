@@ -3,8 +3,17 @@ import serial
 import csv
 import math
 import struct
+import time
 
-MAX_SAMPLES = 10000
+def ser_write(data):
+	writeData = data
+	writeBuff = struct.pack('l', writeData)
+	ser.write(writeBuff)
+	
+def ser_read():
+	sciData = ser.read(4)
+	dat = (struct.unpack(">l", sciData))[0]
+	return dat
 
 if len(sys.argv) != 2:
 	print 'Invalid usage, format is: ' 
@@ -20,52 +29,49 @@ ser.timeout = 5.0
 print "Opening serial port: " + portName
 ser.open()
 
-motorSpeed = 14
+TEST_MAX = 5
+motorSpeed = 15
 
 if not ser.is_open:
 	print "Count not open serial port '%s'" % portName
-else:
-	samples = 0
-	dataList = [];
-	timedOut = False;
-		
-	writeData = 0xAAAA
-	writeBuff = struct.pack('l', writeData)
-	ser.write(writeBuff)
+else:	
+	times = 0
+	dataList = []
+	
+	ser_write(0xAAAA)
 	print "setting the motor speed!"
+	ser_write(motorSpeed)
 	
-	writeData = motorSpeed
-	writeBuff = struct.pack('l', writeData)
-	ser.write(writeBuff)
+	#sample TEST_MAX times
+	while times < TEST_MAX:
+		times += 1
 		
-	writeData = 0xA0A0
-	writeBuff = struct.pack('l', writeData)
-	ser.write(writeBuff)
-	print "starting the motor!"
+		ser_write(0xA0A0)
+		print "starting the motor!"
+		
+		time.sleep(6)
+		
+		ser_write(0x0A0A)
+		print "stopping the motor!"
+		
+		dat = ser_read()
+		dat /= 60.0
+		print "time%d : %f us" % (times,dat)
+		
+		dataList.append (dat)
+		time.sleep(2)
+
+	limit_H = dataList[0]/1.0 + dataList[0]/1.0 * 0.04
+	limit_L = dataList[0]/1.0 - dataList[0]/1.0 * 0.04
+	ok = 0
+	times = 0
+	while times < TEST_MAX - 1:
+		times += 1
+		if limit_H > dataList[times] and limit_L < dataList[times] :
+			ok += 1
 	
-	while not timedOut and (samples < MAX_SAMPLES):
-		
-		sciData = ser.read(4)
-		if len(sciData) <> 4:
-			timedOut = True
-		else:
-			samples += 1
-			dat = (struct.unpack(">l", sciData))[0]
-			dat /= 60.0
-			print "count%d: %f us" % ( samples, dat)
-			dataList.append ( [dat] )
-		
-	writeData = 0x0A0A
-	writeBuff = struct.pack('l', writeData)
-	ser.write(writeBuff)
-	print "stopping the motor!"
-		
-	csvfile = open('result.csv','wb')
-	csvwriter = csv.writer(csvfile)
-	for dataPoint in dataList:
-		if ( not math.isnan(dataPoint[0]) ):
-			csvwriter.writerow( dataPoint )
-		else:
-			csvwriter.writerow( "NAN" )
-	csvfile.close()
-			
+	print "ok : %d times " % (ok)
+	if ok == 4:
+		print "the encoder test ok!"
+	else :
+		print "the encoder test faild!"

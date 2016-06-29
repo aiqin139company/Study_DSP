@@ -10,7 +10,7 @@
 
 #include "common.h"
 
-#define COUNT 2000
+#define COUNT 4000
 
 #define eCAP_ACK()					\
 	ECap1Regs.ECCLR.bit.CEVT1 = 1;	\
