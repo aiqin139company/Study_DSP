@@ -79,16 +79,16 @@ __interrupt void eCAP_CNT(void)
 #ifdef TEST_PIN
 	T_Pin = 1;
 #endif
-	LP.In = ECap1Regs.CAP1;
-	LowPass(&LP);
 	static int cnt = 0;
 	cnt ++;
+	LP.In = ECap1Regs.CAP1;
+	LowPass(&LP);
 	if( COUNT == cnt )
 	{
-		limit_H = LP.Out + LP.Out * 0.05;
-		limit_L = LP.Out - LP.Out * 0.05;
-		PIE_eCAP_ISR();
 		cnt = 0;
+		limit_H = LP.Out + LP.Out * 0.1;
+		limit_L = LP.Out - LP.Out * 0.1;
+		PIE_eCAP_ISR();
 	}
 
 	//CLR Interrupt Flag

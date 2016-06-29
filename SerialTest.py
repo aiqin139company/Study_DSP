@@ -10,11 +10,6 @@ def ser_write(data):
 	writeBuff = struct.pack('l', writeData)
 	ser.write(writeBuff)
 	
-def ser_read():
-	sciData = ser.read(4)
-	dat = (struct.unpack(">l", sciData))[0]
-	return dat
-
 if len(sys.argv) != 2:
 	print 'Invalid usage, format is: ' 
 	print '\t %s "COMx"' % (sys.argv[0])
@@ -24,13 +19,13 @@ else:
 ser = serial.Serial()
 ser.baudrate = 230400
 ser.port = portName
-ser.timeout = 5.0
+ser.timeout = 10.0
 
 print "Opening serial port: " + portName
 ser.open()
 MAX_SAMPLES = 40000
 TEST_MAX = 5
-motorSpeed = 13
+motorSpeed = 15
 
 if not ser.is_open:
 	print "Count not open serial port '%s'" % portName
@@ -47,8 +42,15 @@ else:
 	ser_write(0xA0A0)
 	print "starting the motor!"
 	
-	while 0xFFFF != ser_read():
-		times += 1
-		
+	sciData = ser.read(4)
+	
+	if 0 == ser.inWaiting():
+		print "the encoder test ok!"
+	else :
+		dat = (struct.unpack(">l", sciData))[0]
+		if 0xFFFF == dat :
+			print "the encoder test faild!"
+	
 	ser_write(0x0A0A)	
 	print "starting the motor!"
+	
