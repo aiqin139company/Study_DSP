@@ -8,7 +8,8 @@
 #include "cap.h"
 
 Uint32 period = 0;
-
+Uint32 limit_H = 0;
+Uint32 limit_L = 0;
 LowPassFilter LP;
 
 #ifdef TEST_PIN
@@ -69,36 +70,26 @@ void eCAP_Init(void)
 	ECap1Regs.ECEINT.bit.CEVT1 = 1;            // 1 event = interrupt
 	EDIS;
 
+	LowPass_Params(&LP,_IQ(0.8));
 }
 
 ///eCAP_CEVT1 Interrupt handler1
 __interrupt void eCAP_CNT(void)
 {
-	static int cnt = 0;
-
-	cnt ++;
-
-	if( COUNT == cnt )
-	{
-		cnt = 0;
-		PIE_eCAP_ISR();
-	}
-
-	//CLR Interrupt Flag
-	eCAP_ACK();
-}
-
-///eCAP_CEVT1 Interrupt handler2
-__interrupt void eCAP_ISR(void)
-{
 #ifdef TEST_PIN
 	T_Pin = 1;
 #endif
-
-//	period = ECap1Regs.CAP1;
-//	SCITX(period);					//too fast
 	LP.In = ECap1Regs.CAP1;
 	LowPass(&LP);
+	static int cnt = 0;
+	cnt ++;
+	if( COUNT == cnt )
+	{
+		limit_H = LP.Out + LP.Out * 0.05;
+		limit_L = LP.Out - LP.Out * 0.05;
+		PIE_eCAP_ISR();
+		cnt = 0;
+	}
 
 	//CLR Interrupt Flag
 	eCAP_ACK();
@@ -106,6 +97,22 @@ __interrupt void eCAP_ISR(void)
 #ifdef TEST_PIN
 	T_Pin = 0;
 #endif
+}
+
+
+///eCAP_CEVT1 Interrupt handler2
+__interrupt void eCAP_ISR(void)
+{
+	period = ECap1Regs.CAP1;
+
+	if ( !(limit_H > period && limit_L < period) )
+	{
+		SCITX(0xffff);
+	}
+
+	//CLR Interrupt Flag
+	eCAP_ACK();
+
 }
 
 

@@ -20,8 +20,6 @@ typedef struct LowPass
 	_iq Out;   		// Output
 }LowPassFilter;
 
-extern LowPassFilter LP;
-
 void LowPass_Params(LowPassFilter *v, _iq x);
 void LowPass(LowPassFilter *v);
 

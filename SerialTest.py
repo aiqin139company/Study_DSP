@@ -28,50 +28,27 @@ ser.timeout = 5.0
 
 print "Opening serial port: " + portName
 ser.open()
-
+MAX_SAMPLES = 40000
 TEST_MAX = 5
-motorSpeed = 15
+motorSpeed = 13
 
 if not ser.is_open:
 	print "Count not open serial port '%s'" % portName
 else:	
 	times = 0
+	samples = 0
 	dataList = []
+	timedOut = False;
 	
 	ser_write(0xAAAA)
 	print "setting the motor speed!"
 	ser_write(motorSpeed)
 	
-	#sample TEST_MAX times
-	while times < TEST_MAX:
-		times += 1
-		
-		ser_write(0xA0A0)
-		print "starting the motor!"
-		
-		time.sleep(6)
-		
-		ser_write(0x0A0A)
-		print "stopping the motor!"
-		
-		dat = ser_read()
-		dat /= 60.0
-		print "time%d : %f us" % (times,dat)
-		
-		dataList.append (dat)
-		time.sleep(2)
-
-	limit_H = dataList[0]/1.0 + dataList[0]/1.0 * 0.04
-	limit_L = dataList[0]/1.0 - dataList[0]/1.0 * 0.04
-	ok = 0
-	times = 0
-	while times < TEST_MAX - 1:
-		times += 1
-		if limit_H > dataList[times] and limit_L < dataList[times] :
-			ok += 1
+	ser_write(0xA0A0)
+	print "starting the motor!"
 	
-	print "ok : %d times " % (ok)
-	if ok == 4:
-		print "the encoder test ok!"
-	else :
-		print "the encoder test faild!"
+	while 0xFFFF != ser_read():
+		times += 1
+		
+	ser_write(0x0A0A)	
+	print "starting the motor!"

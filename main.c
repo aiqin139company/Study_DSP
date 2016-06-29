@@ -50,8 +50,6 @@ int main(void)
 	//enable glabol interrupt
 	Interrupt_Enable();
 
-	LowPass_Params(&LP,_IQ(0.8));
-
 	while(1)
 	{
 		flag = SCIRX();
@@ -69,7 +67,6 @@ int main(void)
 		if ( 0x0A0A == flag )
 		{
 			Motor_Disable();
-			SCITX(LP.Out);
 		}
 	}
 
