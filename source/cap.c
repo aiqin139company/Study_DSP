@@ -7,7 +7,7 @@
 
 #include "cap.h"
 
-Uint32 Period1;
+Uint32 period = 0;
 
 #ifdef TEST_PIN
 #define T_Pin  GpioDataRegs.GPBDAT.bit.GPIO39
@@ -21,6 +21,7 @@ void Test_Pin(void)
 }
 #endif
 
+///eCAP_MODULE Initialize
 void eCAP_Init(void)
 {
 #ifdef TEST_PIN
@@ -35,7 +36,7 @@ void eCAP_Init(void)
 
 	//Interrupt Config
 	EALLOW;
-	PieVectTable.ECAP1_INT = &eCAP_ISR;
+	PieVectTable.ECAP1_INT = &eCAP_CNT;
 	IER |= M_INT4;						// Enable CPU INT4 which is connected to ECAP1-4 INT:
 	PieCtrlRegs.PIEIER4.bit.INTx1 = 1;	// Enable eCAP INTn in the PIE: Group 3 interrupt 1-6
 	EDIS;
@@ -56,7 +57,6 @@ void eCAP_Init(void)
 	ECap1Regs.ECCTL2.bit.STOP_WRAP = 0;        // Stop at 1 event
 	ECap1Regs.ECCTL1.bit.CAP1POL = 0;          // Rising edge
 	ECap1Regs.ECCTL1.bit.CTRRST1 = 1;          // Difference operation
-	ECap1Regs.ECCTL1.bit.CTRRST2 = 1;          // Difference operation
 	ECap1Regs.ECCTL2.bit.SYNCI_EN = 1;         // Enable sync in
 	ECap1Regs.ECCTL2.bit.SYNCO_SEL = 0;        // Pass through
 	ECap1Regs.ECCTL1.bit.CAPLDEN = 1;          // Enable capture units
@@ -69,20 +69,35 @@ void eCAP_Init(void)
 
 }
 
+///eCAP_CEVT1 Interrupt handler1
+__interrupt void eCAP_CNT(void)
+{
+	static int cnt = 0;
+
+	cnt ++;
+
+	if( COUNT == cnt )
+	{
+		cnt = 0;
+		PIE_eCAP_ISR();
+	}
+
+	//CLR Interrupt Flag
+	eCAP_ACK();
+}
+
+///eCAP_CEVT1 Interrupt handler2
 __interrupt void eCAP_ISR(void)
 {
 #ifdef TEST_PIN
 	T_Pin = 1;
 #endif
 
-	Period1 = ECap1Regs.CAP1;
-	SCITX(Period1);
+	period = ECap1Regs.CAP1;
+	SCITX(period);					//too fast
 
 	//CLR Interrupt Flag
-	ECap1Regs.ECCLR.bit.CEVT1 = 1;
-	ECap1Regs.ECCLR.bit.INT = 1;
-	ECap1Regs.ECCTL2.bit.REARM = 1;
-	PieCtrlRegs.PIEACK.bit.ACK4 = 1;
+	eCAP_ACK();
 
 #ifdef TEST_PIN
 	T_Pin = 0;

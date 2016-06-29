@@ -40,10 +40,12 @@ int main(void)
 {
 	long flag = 0;
 	System_Init();
+
 	//modules initial
 	Sci_Init();
 	Motor_Init();
 	eCAP_Init();
+
 	//enable glabol interrupt
 	Interrupt_Enable();
 
@@ -52,6 +54,7 @@ int main(void)
 		flag = SCIRX();
 		if ( 0xA0A0 == flag )
 		{
+			PIE_eCAP_CNT();
 			Motor_Enable();
 		}
 
